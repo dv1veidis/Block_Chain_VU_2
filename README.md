@@ -56,3 +56,9 @@ b4da19963f37e017d0ed6663c8bf175c91cc2afffbccab18fb29772e7c4b7b8f
 42606
  ```
  
+ ## version 0.1.1
+ 
+  1. Įgyvendintas merkle tree hashavimas
+  2. Įgyvendintas transakcijų baseino pervedimų sumos ir hasho verifikavimas
+  3. Hashavimo funkcijos patobulinimas
+ 
