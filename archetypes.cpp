@@ -17,7 +17,7 @@ struct block{
     string blockHash;
     string previousHash;
     string timeStamp;
-    int difficulty=2;
+    int difficulty;
     string merkleRootHash;
     int version=1;
     unsigned int nonce;

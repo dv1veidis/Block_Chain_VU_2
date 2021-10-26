@@ -11,7 +11,7 @@ ofstream of(userFile);
 for(int i=0; i<n; i++){
    
     user.name = "user" +std::to_string(i+1) ;
-    user.public_key = hashavimas(user.name, false);
+    user.public_key = hashavimas(user.name);
     user.balance = distribution(generator);
     users.push_back(user);  
     of<<user.name<<endl;
@@ -37,7 +37,7 @@ for(int i=0; i<m; i++){
         transaction.receiver=users[distribution(generator)].name;
     }
     transaction.amount = distributionAmount(generator);
-    transaction.transaction_id = hashavimas(transaction.sender + transaction.receiver + std::to_string(transaction.amount), false);
+    transaction.transaction_id = hashavimas(transaction.sender + transaction.receiver + std::to_string(transaction.amount));
     transactions.push_back(transaction);
     of<<transaction.transaction_id<<endl;
     of<<transaction.sender<<endl;
