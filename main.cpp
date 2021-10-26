@@ -1,6 +1,7 @@
 #include "My_lib.h"
 #include "hashing.cpp"
 #include "infoGeneration.cpp"
+#include "verificationCheck.cpp"
 #include "functions.cpp"
 
 
