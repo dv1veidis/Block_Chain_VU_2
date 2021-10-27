@@ -1,5 +1,7 @@
 #include "My_lib.h"
 
+int failedTrans = 0;
+
 
 bool isValidTransaction (transaction transaction, vector<user> users){
     
@@ -8,6 +10,7 @@ bool isValidTransaction (transaction transaction, vector<user> users){
     int amount = transaction.amount;
     for(int i=0; i<users.size(); i++){
         if(users[i].name==sender && users[i].balance<amount){
+            failedTrans++;
             return false;
         }
     }
@@ -21,6 +24,11 @@ bool isValidHash (transaction transaction){
         return true;
     }
     else{
+        failedTrans++;
         return false;
     }
+}
+
+int failedTransReturn (){
+    return failedTrans;
 }

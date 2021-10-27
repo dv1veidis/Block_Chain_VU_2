@@ -61,4 +61,31 @@ b4da19963f37e017d0ed6663c8bf175c91cc2afffbccab18fb29772e7c4b7b8f
   1. Įgyvendintas merkle tree hashavimas
   2. Įgyvendintas transakcijų baseino pervedimų sumos ir hasho verifikavimas
   3. Hashavimo funkcijos patobulinimas
+
+## version 0.2
+
+ 1. Smulkus hashavimo algoritmo patobulinimas
+ 2. Implementuotas kelių blokų kasimas bei laiminčio bloko atrinkimas
+ 3. Keleta smulkių "bug fixų"
+ 4. Kasimo procesas realizuotas naudojant bandymų skaičių
+ 5. Difficulty pakeltas iki 4
+
+### Kodo sample
+``` powershell
+How many users?
+100
+How many transactions?
+1000
+Minning blocks 0
+1.21074 seconds
+Minning blocks 1
+5.41532 seconds
+Minning blocks 2
+0.393333 seconds
+Minning blocks 3
+0.114094 seconds
+Minning blocks 4
+2.19133 seconds
+Rejected transaction amount: 525
+```
  
