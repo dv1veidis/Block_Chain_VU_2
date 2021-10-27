@@ -49,7 +49,7 @@ int mining(unsigned int attemptNum, vector<int> order){
 
     
 
-void createBlock(blockChain &blockChain, vector<transaction> &pool, vector<user> users){
+void createBlock(blockChain &blockChain, vector<transaction> &pool, vector<user> users, vector<transaction> &successful){
     vector <block> temporaryBlocks;
     block block;
     if(blockChain.size==0){
@@ -72,10 +72,21 @@ void createBlock(blockChain &blockChain, vector<transaction> &pool, vector<user>
         if(pool.size()!=0){
         std::uniform_int_distribution<unsigned int> distribution(0, pool.size());
             transactionNum = distribution(generator);
-            if(isValidTransaction(pool[transactionNum], users) && isValidHash(pool[transactionNum])){
-            block.transactions.push_back(pool[transactionNum]);
-        }
-        pool.erase(pool.begin()+transactionNum);
+            if((transactionNum == pool.size()) && (transactionNum != 0)){ 
+                if(isValidTransaction(pool[transactionNum-1], users) && isValidHash(pool[transactionNum-1])){
+                block.transactions.push_back(pool[transactionNum-1]);
+                successful.push_back(pool[transactionNum-1]);    
+            }
+            pool.erase(pool.begin()+(transactionNum-1));
+            }
+            else{
+                if(isValidTransaction(pool[transactionNum], users) && isValidHash(pool[transactionNum])){
+                    block.transactions.push_back(pool[transactionNum]);
+                    successful.push_back(pool[transactionNum]);
+                    
+            }
+            pool.erase(pool.begin()+transactionNum);
+            } 
         }
         else{
             break;
@@ -84,13 +95,13 @@ void createBlock(blockChain &blockChain, vector<transaction> &pool, vector<user>
     }
     else{
         for(int i=0; i<100;){
-
             if(pool.size()!=0){
                 std::uniform_int_distribution<unsigned int> distribution(0, pool.size());
                 transactionNum = distribution(generator);
             if((transactionNum == pool.size()) && (transactionNum != 0)){ 
                 if(isValidTransaction(pool[transactionNum-1], users) && isValidHash(pool[transactionNum-1])){
                 block.transactions.push_back(pool[transactionNum-1]);
+                successful.push_back(pool[transactionNum-1]);
                 i++;      
             }
             pool.erase(pool.begin()+(transactionNum-1));
@@ -98,6 +109,7 @@ void createBlock(blockChain &blockChain, vector<transaction> &pool, vector<user>
             else {
                 if(isValidTransaction(pool[transactionNum], users) && isValidHash(pool[transactionNum])){
                 block.transactions.push_back(pool[transactionNum]);
+                successful.push_back(pool[transactionNum]);
                 i++; 
             }
             pool.erase(pool.begin()+transactionNum);
@@ -162,13 +174,18 @@ void newBalance(vector<user> users, vector<transaction> pool){
 }
 
 void blockChainFunction(blockChain &blockChain,vector<user> users,vector<transaction> pool){
+    
+    if(pool.size()==0){
+        cout<<"the pool is empty, there are no transactions to create a block"<<endl;
+    }
+    else{
+    vector<transaction> transactions;
     ofstream fd("newBalanceUsers.txt");
     string path;
-    newBalance(users, pool);
-    do {
+        do {
         path = "blockChain/block"+std::to_string(blockChain.size);
         cout<<"Minning blocks "<<blockChain.size<<endl;
-        createBlock(blockChain, pool, users);
+        createBlock(blockChain, pool, users, transactions);
         ofstream blocksFile(path+".txt");
             blocksFile<<"Block hash: "<<blockChain.blocks[blockChain.size].blockHash<<endl;
             blocksFile<<"Prievious hash: "<<blockChain.blocks[blockChain.size].previousHash<<endl;
@@ -191,13 +208,15 @@ void blockChainFunction(blockChain &blockChain,vector<user> users,vector<transac
         blocksFile.close();
     } while(!pool.empty());
     cout<<"Rejected transaction amount: "<<failedTransReturn()<<endl;
-    
+    newBalance(users, transactions);
     for(int i=0; i<users.size(); i++) {
         fd<<users[i].name<<endl;
         fd<<users[i].public_key<<endl;
         fd<<users[i].balance<<endl;
         }
         fd.close();
+    }
+    
     
 
 }
